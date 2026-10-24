@@ -123,14 +123,24 @@ footer{background:#061f39;color:#d7e2ef;padding:34px 0 90px}.footer-row{display:
     const km = Number.isFinite(rawKm) && rawKm >= 0 ? rawKm : 0;
     const timeFare = hours * 100;
     const distanceFare = km * 2;
-    const total = timeFare + distanceFare;
+    const calculatedFare = timeFare + distanceFare;
+
+    //Minimum fare is ₹300
+    const total = Math.max(300,calculatedFare);
+
     totalOutput.textContent = money(total);
     timeOutput.textContent = 'Time: ' + money(timeFare);
     distanceOutput.textContent = 'Distance: ' + money(distanceFare);
-    const message = 'Hi, I calculated an estimated Udumalpet Call Driver fare. Hours: ' + hours +
+    const minimumNote = calculatedFare<300
+     ?'(₹300 minimum charge applied)'
+     :'';
+
+    const message = 'Hi, I calculated an estimated Udumalpet Call Driver fare. '+
+      ' Hours: ' + hours +
       ', Kilometres: ' + km + ', Time fare: ' + money(timeFare) +
       ', Distance fare: ' + money(distanceFare) + ', Total estimate: ' + money(total) +
-      '. Please confirm availability and final charges.';
+       minimumNote +
+       '.Minimum charge ₹300. Please confirm availability and final charges.';
     whatsappLink.href = 'https://wa.me/919994732496?text=' + encodeURIComponent(message);
   }
   [hoursInput, kmInput].forEach(input => input.addEventListener('input', updateFare));
